@@ -1,6 +1,11 @@
 name: Create GitHub Release
 description: Creates a GitHub Release containing NuGet packages
 
+inputs:
+  token:
+    description: The token used to publish the GitHub Release
+    required: true
+
 runs:
   using: composite
 
@@ -39,7 +44,7 @@ runs:
 
     - name: Create GitHub Release
       env:
-        GH_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
+        GH_TOKEN: ${{ inputs.token }}
       shell: bash
       run: |
         files=$(find . -type f \( -name "*.nupkg" -o -name "*.snupkg" \))

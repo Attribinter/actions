@@ -1,6 +1,11 @@
 name: Publish GitHub Release to GitHub Packages
 description: Publishes all NuGet packages from a GitHub Release to GitHub Packages
 
+inputs:
+  token:
+    description: The token used to download the GitHub Release and publish to GitHub Packages
+    required: true      
+
 runs:
   using: composite
 
@@ -11,11 +16,11 @@ runs:
       with:
         tag: ${{ github.event.release.tag_name }}
         fileName: "*"
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ input.token }}
 
     - name: Publish Packages
       shell: bash
       run: |
         for file in ./*.nupkg ./*.snupkg; do
-          dotnet nuget push "$file" -s "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -k "${{ secrets.GITHUB_TOKEN }}"
+          dotnet nuget push "$file" -s "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -k "${{ input.token }}"
         done 
