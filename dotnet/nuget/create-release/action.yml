@@ -48,5 +48,10 @@ runs:
       shell: bash
       run: |
         files=$(find . -type f \( -name "*.nupkg" -o -name "*.snupkg" \))
-        gh config set prompt disabled
-        gh release create "v${{ steps.gitVersion.outputs.SemVer }}" $(echo $files) --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
+
+        if [-n $files]; then
+          gh config set prompt disabled
+          gh release create "v${{ steps.gitVersion.outputs.SemVer }}" $(echo $files) --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
+        else
+          echo "No NuGet Packages detected, not creating GitHub Release."
+        fi
