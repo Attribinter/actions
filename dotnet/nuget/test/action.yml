@@ -1,0 +1,46 @@
+name: Test Libraries
+description: Tests .NET libraries, distributed as NuGet packages
+
+runs:
+  using: composite
+
+  steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore .NET
+      shell: bash
+      run: dotnet restore
+  
+    - name: Build .NET Projects
+      shell: bash
+      run: dotnet build -c Release
+  
+    - name: Run .NET Tests
+      shell: bash
+      run: dotnet test -c Release --no-build
+  
+    - name: Verify can create NuGet Packages
+      shell: bash
+      run: dotnet pack --include-symbols --no-build
+
+    - name: Setup GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: 5.x
+
+    - name: Verify can Execute GitVersion
+      id: gitVersion
+      uses: gittools/actions/gitversion/execute@v0
+  
+    - name: Verify Format
+      shell: bash
+      run: dotnet format --verify-no-changes
