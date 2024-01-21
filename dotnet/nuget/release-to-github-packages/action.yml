@@ -21,6 +21,6 @@ runs:
     - name: Publish Packages
       shell: bash
       run: |
-        for file in ./*.nupkg ./*.snupkg; do
+        for file in ./*.nupkg; do
           dotnet nuget push "$file" -s "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -k "${{ inputs.token }}"
         done 
