@@ -16,11 +16,11 @@ runs:
       with:
         tag: ${{ github.event.release.tag_name }}
         fileName: "*"
-        token: ${{ input.token }}
+        token: ${{ inputs.token }}
 
     - name: Publish Packages
       shell: bash
       run: |
         for file in ./*.nupkg ./*.snupkg; do
-          dotnet nuget push "$file" -s "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -k "${{ input.token }}"
+          dotnet nuget push "$file" -s "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" -k "${{ inputs.token }}"
         done 
