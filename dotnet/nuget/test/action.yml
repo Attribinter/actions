@@ -19,15 +19,15 @@ runs:
     - name: Restore .NET
       shell: bash
       run: dotnet restore
-  
+
     - name: Build .NET Projects
       shell: bash
       run: dotnet build -c Release
-  
+
     - name: Run .NET Tests
       shell: bash
       run: dotnet test -c Release --no-build
-  
+
     - name: Verify can create NuGet Packages
       shell: bash
       run: dotnet pack --include-symbols --no-build
@@ -40,7 +40,7 @@ runs:
     - name: Verify can Execute GitVersion
       id: gitVersion
       uses: gittools/actions/gitversion/execute@v0
-  
+
     - name: Verify Format
       shell: bash
       run: dotnet format --verify-no-changes

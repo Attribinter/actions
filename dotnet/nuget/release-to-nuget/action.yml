@@ -12,7 +12,7 @@ runs:
         tag: ${{ github.event.release.tag_name }}
         fileName: "*"
         token: ${{ secrets.GITHUB_TOKEN }}
-      
+
     - name: Publish Packages
       shell: bash
       run: |

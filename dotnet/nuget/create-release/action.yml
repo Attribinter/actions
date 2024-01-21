@@ -4,44 +4,44 @@ description: Creates a GitHub Release containing NuGet packages
 runs:
   using: composite
 
-      steps:
+  steps:
 
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
 
-      - name: Setup GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: 5.x
+    - name: Setup GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: 5.x
 
-      - name: Execute GitVersion
-        id: gitVersion
-        uses: gittools/actions/gitversion/execute@v0
+    - name: Execute GitVersion
+      id: gitVersion
+      uses: gittools/actions/gitversion/execute@v0
 
-      - name: Restore .NET
-        shell: bash
-        run: dotnet restore
+    - name: Restore .NET
+      shell: bash
+      run: dotnet restore
 
-      - name: Build .NET Projects
-        shell: bash
-        run: dotnet build --no-restore -c Release /p:VersionPrefix="${{ steps.gitVersion.outputs.majorMinorPatch }}" /p:VersionSuffix="${{ steps.gitVersion.outputs.preReleaseTag }}"
+    - name: Build .NET Projects
+      shell: bash
+      run: dotnet build --no-restore -c Release /p:VersionPrefix="${{ steps.gitVersion.outputs.majorMinorPatch }}" /p:VersionSuffix="${{ steps.gitVersion.outputs.preReleaseTag }}"
 
-      - name: Create NuGet Packages
-        shell: bash
-        run: dotnet pack --no-build /p:PackageVersion="${{ steps.gitVersion.outputs.SemVer }}"
+    - name: Create NuGet Packages
+      shell: bash
+      run: dotnet pack --no-build /p:PackageVersion="${{ steps.gitVersion.outputs.SemVer }}"
 
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
-        shell: bash
-        run: |
-          files=$(find . -type f \( -name "*.nupkg" -o -name "*.snupkg" \))
-          gh config set prompt disabled
-          gh release create "v${{ steps.gitVersion.outputs.SemVer }}" $(echo $files) --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
+    - name: Create GitHub Release
+      env:
+        GH_TOKEN: ${{ secrets.TRIGGER_TOKEN }}
+      shell: bash
+      run: |
+        files=$(find . -type f \( -name "*.nupkg" -o -name "*.snupkg" \))
+        gh config set prompt disabled
+        gh release create "v${{ steps.gitVersion.outputs.SemVer }}" $(echo $files) --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
