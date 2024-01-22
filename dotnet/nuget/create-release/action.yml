@@ -49,7 +49,7 @@ runs:
       run: |
         files=$(find . -type f \( -name "*.nupkg" -o -name "*.snupkg" \))
 
-        if [ -n $files ]; then
+        if [ -n "$files" ]; then
           gh config set prompt disabled
           gh release create "v${{ steps.gitVersion.outputs.SemVer }}" $(echo $files) --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
         else
