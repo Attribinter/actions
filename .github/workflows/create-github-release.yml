@@ -46,4 +46,9 @@ jobs:
             gh release delete "v${{ steps.gitVersion.outputs.Major }}"
           fi
 
+          while gh release view "v${{ steps.gitVersion.outputs.Major }}" &>/dev/null; do
+            echo "Waiting for deletion"
+            sleep 1
+          done 
+
           gh release create "v${{ steps.gitVersion.outputs.Major }}" --title "v${{ steps.gitVersion.outputs.Major }}" --repo "${{ github.repository }}"
