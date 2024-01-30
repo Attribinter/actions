@@ -45,7 +45,7 @@ runs:
       uses: tj-actions/changed-files@v42
       with:
         files: '*.cs'
-        files-separator: ' '
+        files_separator: ' '
 
     - name: Verify Format
       if: steps.changed-source-files.outputs.any_changed == 'true'
