@@ -1,0 +1,47 @@
+name: Create GitHub Release
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    defaults:
+        run:
+          shell: bash
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: 5.x
+    
+      - name: Execute GitVersion
+        id: gitVersion
+        uses: gittools/actions/gitversion/execute@v0
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.gitVersion.outputs.SemVer }}" --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
+
+          if gh release view "v${{ steps.gitVersion.outputs.Major }}" &>/dev/null; then
+            gh release delete "v${{ steps.gitVersion.outputs.Major }}"
+          fi
+
+          gh release create "v${{ steps.gitVersion.outputs.Major }}" --title "v${{ steps.gitVersion.outputs.Major }}" --repo "${{ github.repository }}"
