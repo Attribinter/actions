@@ -37,10 +37,17 @@ runs:
       with:
         versionSpec: 5.x
 
-    - name: Verify can Execute GitVersion
-      id: gitVersion
+    - name: Verify can execute GitVersion
       uses: gittools/actions/gitversion/execute@v0
 
+    - name: Get modified files
+      id: changed-source-files
+      uses: tj-actions/changed-files@v42
+      with:
+        files: *.cs
+        files-separator: ' '
+
     - name: Verify Format
+      if: steps.changed-source-files.outputs.any_changed == 'true'
       shell: bash
-      run: dotnet format --verify-no-changes
+      run: dotnet format --verify-no-changes -include ${{ setps.changed-source-files.outputs.all_changed_files }}
