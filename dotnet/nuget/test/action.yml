@@ -50,4 +50,4 @@ runs:
     - name: Verify Format
       if: steps.changed-source-files.outputs.any_changed == 'true'
       shell: bash
-      run: dotnet format --verify-no-changes -include ${{ setps.changed-source-files.outputs.all_changed_files }}
+      run: dotnet format --verify-no-changes -include ${{ steps.changed-source-files.outputs.all_changed_files }}
