@@ -41,6 +41,8 @@ jobs:
           gh release create "v${{ steps.gitVersion.outputs.SemVer }}" --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
 
           if gh release view "v${{ steps.gitVersion.outputs.Major }}" &>/dev/null; then
+            echo "Deleting v${{ steps.gitVersion.outputs.Major }}"
+
             gh release delete "v${{ steps.gitVersion.outputs.Major }}"
           fi
 
