@@ -42,6 +42,8 @@ jobs:
 
           if gh release view "v${{ steps.gitVersion.outputs.Major }}" &>/dev/null; then
             gh release delete "v${{ steps.gitVersion.outputs.Major }}" --cleanup-tag
+
+            sleep 5 # Reusing tag before fully deleted causes release to be saved as draft: https://github.com/cli/cli/issues/8458
           fi
 
           gh release create "v${{ steps.gitVersion.outputs.Major }}" --title "v${{ steps.gitVersion.outputs.Major }}" --repo "${{ github.repository }}"
