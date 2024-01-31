@@ -44,9 +44,7 @@ runs:
       id: changed-source-files
       uses: tj-actions/changed-files@v42
       with:
-        files: |
-          **/*.cs
-          *.cs
+        files: '*'
         files_separator: ' '
 
     - name: Log changed files
