@@ -44,8 +44,14 @@ runs:
       id: changed-source-files
       uses: tj-actions/changed-files@v42
       with:
-        files: '*.cs'
+        files: |
+          **/*.cs
+          *.cs
         files_separator: ' '
+
+    - name: Log changed files
+      shell: bash
+      run: echo "${{ steps.changed-source-files.outputs.all_changed_files }}"
 
     - name: Verify Format
       if: steps.changed-source-files.outputs.any_changed == 'true'
