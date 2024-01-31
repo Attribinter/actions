@@ -44,7 +44,7 @@ runs:
       id: changed-source-files
       uses: tj-actions/changed-files@v42
       with:
-        files: '*'
+        files: '**/*'
         files_separator: ' '
 
     - name: Log changed files
