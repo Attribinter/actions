@@ -47,11 +47,7 @@ runs:
         files: '**/*.cs'
         files_separator: ' '
 
-    - name: Log changed files
-      shell: bash
-      run: echo "${{ steps.changed-source-files.outputs.all_changed_files }}"
-
     - name: Verify Format
       if: steps.changed-source-files.outputs.any_changed == 'true'
       shell: bash
-      run: dotnet format --verify-no-changes -include ${{ steps.changed-source-files.outputs.all_changed_files }}
+      run: dotnet format --verify-no-changes --include ${{ steps.changed-source-files.outputs.all_changed_files }}
