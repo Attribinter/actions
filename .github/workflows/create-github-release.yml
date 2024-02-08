@@ -38,12 +38,26 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "v${{ steps.gitVersion.outputs.SemVer }}" --title "v${{ steps.gitVersion.outputs.SemVer }}" --repo "${{ github.repository }}"
+          major_name="v${{ steps.gitVersion.outputs.Major }}"
+          minor_name="v${{ steps.gitVersion.outputs.Major }}.${{ steps.gitVersion.outputs.Minor }}"
+          patch_name="v${{ steps.gitVersion.outputs.SemVer }}"
 
-          if gh release view "v${{ steps.gitVersion.outputs.Major }}" &>/dev/null; then
-            gh release delete "v${{ steps.gitVersion.outputs.Major }}" --cleanup-tag
+          if gh release view "$major_name" &>/dev/null; then
+            gh release delete "$major_name" --cleanup-tag
 
+            should_sleep=true
+          fi
+
+          if gh release view "$minor_name" &>/dev/null; then
+            gh release delete "$minor_name" --cleanup-tag
+
+            should_sleep=true
+            fi
+            
+          if [ "$should_sleep" = true ] ; then
             sleep 5 # Reusing tag before fully deleted causes release to be saved as draft: https://github.com/cli/cli/issues/8458
           fi
 
-          gh release create "v${{ steps.gitVersion.outputs.Major }}" --title "v${{ steps.gitVersion.outputs.Major }}" --repo "${{ github.repository }}"
+          gh release create "$major_name" --title "$major_name" --repo "${{ github.repository }}"
+          gh release create "$minor_name" --title "$minor_name" --repo "${{ github.repository }}"
+          gh release create "$patch_name" --title "$patch_name" --repo "${{ github.repository }}"
