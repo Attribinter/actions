@@ -7,14 +7,23 @@ runs:
   steps:
 
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.1
       with:
         fetch-depth: 0
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v4.0.0
       with:
         dotnet-version: 8.0.x
+
+    - name: Setup GitVersion
+      uses: gittools/actions/gitversion/setup@v0.11.0
+      with:
+        versionSpec: 5.x
+
+    - name: Execute GitVersion
+      id: gitVersion
+      uses: gittools/actions/gitversion/execute@v0.11.0
 
     - name: Restore .NET
       shell: bash
@@ -22,27 +31,19 @@ runs:
 
     - name: Build .NET Projects
       shell: bash
-      run: dotnet build -c Release
+      run: dotnet build --no-restore -c Release /p:VersionPrefix="${{ steps.gitVersion.outputs.majorMinorPatch }}" /p:VersionSuffix="${{ steps.gitVersion.outputs.preReleaseTag }}"
 
     - name: Run .NET Tests
       shell: bash
-      run: dotnet test -c Release --no-build
+      run: dotnet test --no-build -c Release
 
     - name: Verify can create NuGet Packages
       shell: bash
       run: dotnet pack --include-symbols --no-build
 
-    - name: Setup GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: 5.x
-
-    - name: Verify can execute GitVersion
-      uses: gittools/actions/gitversion/execute@v0
-
     - name: Get modified files
       id: changed-source-files
-      uses: tj-actions/changed-files@v42
+      uses: tj-actions/changed-files@v42.0.2
       with:
         files: '**/*.cs'
         files_separator: ' '
