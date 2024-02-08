@@ -39,7 +39,7 @@ runs:
 
     - name: Verify can create NuGet Packages
       shell: bash
-      run: dotnet pack --include-symbols --no-build
+      run: dotnet pack --no-build /p:PackageVersion="${{ steps.gitVersion.outputs.SemVer }}"
 
     - name: Get modified files
       id: changed-source-files
