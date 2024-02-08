@@ -12,7 +12,7 @@ runs:
   steps:
 
     - name: Download Release Assets
-      uses: robinraju/release-downloader@v1.8
+      uses: robinraju/release-downloader@v1.9
       with:
         tag: ${{ github.event.release.tag_name }}
         fileName: "*"

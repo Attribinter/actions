@@ -12,23 +12,23 @@ runs:
   steps:
 
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.1
       with:
         fetch-depth: 0
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v4.0.0
       with:
         dotnet-version: 8.0.x
 
     - name: Setup GitVersion
-      uses: gittools/actions/gitversion/setup@v0
+      uses: gittools/actions/gitversion/setup@v0.11.0
       with:
         versionSpec: 5.x
 
     - name: Execute GitVersion
       id: gitVersion
-      uses: gittools/actions/gitversion/execute@v0
+      uses: gittools/actions/gitversion/execute@v0.11.0
 
     - name: Restore .NET
       shell: bash
