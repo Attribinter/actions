@@ -52,7 +52,7 @@ jobs:
             gh release delete "$minor_name" --cleanup-tag
 
             should_sleep=true
-            fi
+          fi
             
           if [ "$should_sleep" = true ] ; then
             sleep 5 # Reusing tag before fully deleted causes release to be saved as draft: https://github.com/cli/cli/issues/8458
