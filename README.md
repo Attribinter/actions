@@ -1,3 +1,3 @@
 # Actions
 
-Hosts common GitHub Actions used by `Attribinter`.
+Hosts common GitHub Actions used by `Paraminter`.
