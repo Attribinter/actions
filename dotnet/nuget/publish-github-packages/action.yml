@@ -1,10 +1,10 @@
-name: Publish GitHub Release to GitHub Packages
+name: Publish NuGet packages to GitHub Packages
 description: Publishes all NuGet packages from a GitHub Release to GitHub Packages
 
 inputs:
   token:
     description: The token used to download the GitHub Release and publish to GitHub Packages
-    required: true      
+    required: true
 
 runs:
   using: composite
