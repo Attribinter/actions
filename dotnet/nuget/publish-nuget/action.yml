@@ -1,12 +1,12 @@
-name: Publish GitHub Release to NuGet
-description: Publishes all NuGet packages from a GitHub Release to NuGet
+name: Publish NuGet packages to NuGet.org
+description: Publishes all NuGet packages from a GitHub Release to NuGet.org
 
 inputs:
   github-token:
     description: The token used to download the GitHub Release
     required: true
   nuget-token:
-    description: The token used to publish to NuGet
+    description: The token used to publish to NuGet.org
     required: true      
 
 runs:
